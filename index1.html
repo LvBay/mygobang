@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Distorted Button Effects | Codrops</title>
+		<meta name="description" content="A set of inspirational distorted button effects using SVG filters" />
+		<meta name="keywords" content="distorted, effect, button, svg, inspiration, filter, web design" />
+		<meta name="author" content="Adrien Denat for Codrops" />
+		<link rel="shortcut icon" href="/static/test/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="/static/test/css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="/static/test/css/main.css" />
+		<!--[if IE]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+		<div class="container">
+			
+			<div class="content">
+				<section class="section">
+					<h3 class="section__title">梦网行业</h3>
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters">
+						<defs>
+							<filter id="filter-goo-1">
+								<feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+								<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+								<feComposite in="SourceGraphic" in2="goo" />
+							</filter>
+						</defs>
+					</svg>
+					<button id="component-1" class="button button--1" data-oid="1">
+						Click me
+						<span class="button__container">
+							<span class="circle top-left"></span>
+							<span class="circle top-left"></span>
+							<span class="circle top-left"></span>
+							<span class="button__bg"></span>
+							<span class="circle bottom-right"></span>
+							<span class="circle bottom-right"></span>
+							<span class="circle bottom-right"></span>
+						</span>
+					</button>
+					<span class="ret"></span>
+				</section>
+				<section class="section">
+					<h3 class="section__title">创蓝营销</h3>
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters">
+						<defs>
+							<filter id="filter-goo-2">
+								<feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+								<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+								<feComposite in="SourceGraphic" in2="goo" />
+							</filter>
+						</defs>
+					</svg>
+					<button id="component-2" class="button button--2" data-oid="2" style="filter: url('#filter-goo-2')">
+						Click me
+						<span class="button__bg"></span>
+					</button>
+					<span class="ret"></span>
+				</section>
+				<section class="section">
+					<h3 class="section__title">梦网营销</h3>
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters">
+						<defs>
+							<filter id="filter-glitch-1">
+								<feTurbulence type="fractalNoise" baseFrequency="0.000001" numOctaves="1" result="warp" />
+								<feOffset dx="-90" dy="-90" result="warpOffset" />
+								<feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset" />
+							</filter>
+						</defs>
+					</svg>
+					<button id="component-5" class="button button--5" data-oid="3">Click me</button>
+					<span class="ret"></span>
+				</section>
+				<section class="section">
+					<h3 class="section__title">梦网行业</h3>
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters">
+						<defs>
+							<filter id="filter-glitch-3">
+								<feTurbulence type="fractalNoise" baseFrequency="0.000001" numOctaves="1" result="warp" />
+								<feOffset dx="-90" dy="-90" result="warpOffset" />
+								<feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset" />
+							</filter>
+						</defs>
+					</svg>
+					<button id="component-7" class="button button--7" data-oid="4">Click me</button>
+					<span class="ret"></span>
+				</section>
+				
+		</div>
+		<!-- /container -->
+		<script src="/static/test/js/TweenMax.min.js"></script>
+		<script src="/static/test/js/main.js"></script>
+		<script src="/static/js/jquery-1.11.2.min.js?v=20160603"></script>
+		<script type="text/javascript">
+		$(function(){
+			var flag=true;
+			$(".button").click(function(){
+				var _this=$(this);
+				var oid=_this.data("oid");
+				if(flag){
+					flag=false;
+					$.post("/balance",{action:oid},function(data){
+						if(data){
+							_this.siblings('.ret').text("错误大咖啡看撒娇的风口浪尖阿斯蒂芬李会计考试了多几分快乐圣诞节疯狂了");
+						}else{
+							alert("获取失败！");
+						}
+						flag=true;
+					});
+				}
+			})
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,232 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>js练习--五子棋对战</title>
+<style type="text/css">
+body{
+	width:99%;
+	height:900px;
+	text-align:center;
+	background-color:#c8c8c8;
+}
+button{
+	width:120px;
+	height:40px;
+	border-radius:20px;
+	border:1px solid #444;
+	outline:none;
+}
+#qipan{
+	
+	width:821px;
+	height:716px;
+	padding:20px;
+	background-color:#905a3d;
+	border:6px solid #5f3c23;
+	margin:20px auto;
+	position:relative;
+}
+#qipan>div{
+	width:49px;
+	height:49px;
+	border:1px solid #333;
+	float:left;
+	position:relative;
+}
+#qipan>div span{
+	display:inline-block;
+	width:40px;
+	height:40px;
+	border-radius:100%;
+	position:absolute;
+}
+
+body > div{
+	width:821px;
+	height:716px;
+	margin:auto;
+	position:relative;
+}
+.qishou{
+	width:130px;
+	height:116px;
+	background-color:#8c8c8c;
+	text-align:left;
+	line-height:50px;
+	position:absolute;
+	left:-135px;
+	z-index:100;
+}
+.qishou > div span{
+
+	display:inline-block;
+	width:40px;
+	height:40px;
+	position:relative;
+	top:12px;
+	margin-left:10px;
+	border-radius:100%;
+}
+.qishou > div input{
+	width:56px;
+	height:30px;
+	font-size:20px;
+	line-height:30px;
+	margin-left:10px;
+}
+.qishou > div:nth-child(1) span{background-color:white;}
+.qishou > div:nth-child(2) span{background-color:#333;}
+
+#beginDiv{
+	width:862px;
+	height:758px;
+	position:absolute;
+	background-color:#8c8c8c;
+	opacity:0.7;
+	filter:alpha(opacity=70);
+	top:5px;
+	left:6px;
+}
+#beginDiv p{
+	color:#c8c8c8;
+	font-size:40px;
+	margin-top:200px;
+}
+
+</style>
+<script>
+var whiteflag=true;
+var eleObject=[];
+var beginflag = false;
+var timeWhiteUnm = [0,0];
+var timeBlackUnm = [0,0];
+function createHead(){
+	for(i=0;i<224;i++){
+		var parentDiv=document.getElementById("qipan");
+		var ele = document.createElement("div");
+		var eleSpan=document.createElement("span");
+		eleSpan.onclick=function(){play(this)};
+		eleSpan.style.top="-20px";
+		eleSpan.style.left="-20px";
+		ele.appendChild(eleSpan);
+		
+		if((i+1)%16==0){
+			var eleSpan2=document.createElement("span");
+			eleSpan2.style.top="-20px";
+			eleSpan2.style.right="-20px";
+			eleSpan2.onclick=function(){play(this)};
+			ele.appendChild(eleSpan2);
+		}
+		if(i>207){
+			var eleSpan3=document.createElement("span");
+			eleSpan3.style.bottom="-20px";
+			eleSpan3.style.left="-20px";
+			eleSpan3.onclick=function(){play(this)};
+			ele.appendChild(eleSpan3);
+		}
+		if(i==223){
+			var eleSpan4=document.createElement("span");
+			eleSpan4.onclick=function(){play(this)};
+			eleSpan4.style.bottom="-20px";
+			eleSpan4.style.right="-20px";
+			ele.appendChild(eleSpan4);
+		}
+		parentDiv.appendChild(ele);
+		
+	}
+	playTime()
+}
+function play(ele){
+	//不可以重复下同一位置
+	if(!((ele.style.backgroundColor=="white")||(ele.style.backgroundColor=="rgb(51, 51, 51)")) && beginflag){
+		if(whiteflag){
+			ele.style.backgroundColor="white";
+		
+		}else{
+			ele.style.backgroundColor="#333";
+		}
+		eleObject.push(ele);
+		whiteflag=!whiteflag;	
+	}	
+}
+
+function playAgain(){
+	for(i=0; i<eleObject.length; i++){
+		eleObject[i].style.backgroundColor="Transparent";
+	}
+	eleObject=[];
+	whiteflag=true;
+	beginflag = true;
+	timeWhiteUnm = [0,0];
+	timeBlackUnm = [0,0];
+	clearTimeout(settime);
+	var whiteTimeSpan =document.getElementById('whiteTimeSpan');
+	var blackTimespan =document.getElementById('blackTimespan');
+	var whiteTime =document.getElementById('whiteTime');
+	var blackTime =document.getElementById('blackTime');
+	whiteTimeSpan.style.backgroundColor="white";
+	blackTimespan.style.backgroundColor="#333";
+	whiteTime.value="00:00";
+	blackTime.value="00:00";
+	document.getElementById("beginDiv").style.display="none";
+	playTime()
+	
+}
+
+function playTime(){
+	
+	if(beginflag){
+		var whiteTimeSpan =document.getElementById('whiteTimeSpan');
+		var blackTimespan =document.getElementById('blackTimespan');
+		var whiteTime =document.getElementById('whiteTime');
+		var blackTime =document.getElementById('blackTime');
+		if(whiteflag){
+			
+			setTimeout(function(){whiteTimeSpan.style.backgroundColor="Transparent"},300);
+			whiteTimeSpan.style.backgroundColor="white"
+			arrayTimeChange(timeWhiteUnm);
+			whiteTime.value=(/^\d$/.test(timeWhiteUnm[1]) ? '0' + timeWhiteUnm[1] : timeWhiteUnm[1])+":"+(/^\d$/.test(timeWhiteUnm[0]) ? '0' + timeWhiteUnm[0] : timeWhiteUnm[0]);
+			
+		}else{
+			
+			setTimeout(function(){blackTimespan.style.backgroundColor="Transparent"},300);
+			blackTimespan.style.backgroundColor="#333";
+			arrayTimeChange(timeBlackUnm);
+			blackTime.value=(/^\d$/.test(timeBlackUnm[1]) ? '0' + timeBlackUnm[1] : timeBlackUnm[1])+":"+(/^\d$/.test(timeBlackUnm[0]) ? '0' + timeBlackUnm[0] : timeBlackUnm[0]);
+		}
+		whiteTimeSpan.style.backgroundColor="white"
+		blackTimespan.style.backgroundColor="#333";
+	}
+	
+	settime = setTimeout(function(){playTime();},1000);
+
+}
+
+function arrayTimeChange(arr){
+	if(arr[0]<59){
+		arr[0]++;
+	}else{
+		arr[0]=0;
+		arr[1]++;
+	}
+	
+}
+</script>
+</head>
+<body onload="createHead();">
+<h1>五子棋对战</h1>
+<button onclick="playAgain();">开始 / 重新开始</button>
+<div>
+	<div class="qishou">
+		<div>
+			<span id="whiteTimeSpan"></span><input type="text" id="whiteTime" value="00:00" />
+		</div>
+		<div>
+			<span id="blackTimespan"></span><input type="text" id="blackTime" value="00:00" />
+		</div>
+	</div>
+	<div id="qipan"></div>
+	<div id="beginDiv"><p>点击上面开始按钮即可开始游戏哦</p></div>
+</div>
+</body>
+</html>

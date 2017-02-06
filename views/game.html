@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="/static/style/board.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/game.css" rel="stylesheet" type="text/css">
+</head>
+<body class="material_design">
+<table id="board" onclick="tbl_onclick()">
+
+    <tr class="border-top" id="row_0">
+        <td class="border-left" id="row_0_0">0</td>
+        {{range loop 13}}<td id="row_0_{{.}}">{{.}}</td>
+        {{end}}<td class="border-right" id="row_0_14">14</td>
+    </tr>
+
+    <!-- {{range loop 13}}
+    <tr id="row_{{.}}">
+        <td class="border-left" id="row_{{.}}_0"></td>
+        {{$super:=.}}{{range loop 13}}<td id="row_{{$super}}_{{.}}"></td>
+        {{end}}<td class="border-right" id="row_{{.}}_14"></td>
+    </tr>
+    {{end}}
+
+    <tr class="border-bottom" id="row_14">
+        <td class="border-left" id="row_14_0"></td>
+        {{range loop 13}}<td id="row_14_{{.}}"></td>
+        {{end}}<td class="border-right" id="row_14_14"></td>
+    </tr> -->
+
+</table>
+<script type="text/javascript">
+    var white = true;
+    var black = false;
+    var who = function(){
+        if (white){
+            return "white";
+        }
+        return "red";
+    }
+    var turn = function(){
+        white = !white;
+        black = !black;
+    }
+</script>
+<script type="text/javascript">
+    
+    function tbl_onclick() {
+
+    }
+</script>
+<!-- <script type="text/javascript">
+    var HOLDER="";
+    window.onload=function(){
+        var ws = new WebSocket("ws://localhost:9091/gobangws");
+        ws.onopen = function(){
+             alert("连接成功...");
+             ws.send("100");
+        };
+
+        ws.onmessage = function(data){
+            console.log(data);
+            var obj = JSON.parse(data.data);
+            HOLDER = obj.Holder;
+            console.log(HOLDER);
+            console.log(HOLDER==1);
+            if (HOLDER==1){
+
+            }
+            alert("接收数据:"+data)
+        };
+        ws.onclose = function(){
+            alert("连接关闭"); 
+        };
+    }
+</script> -->
+</html>
