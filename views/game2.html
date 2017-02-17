@@ -70,7 +70,7 @@ body{
 			document.getElementById(ret.Position).style.backgroundColor = ret.Role;
 			if (ret.Over==true){
 				if (ret.Role==Holder.Role){
-					alert("千秋万载，一统江湖！");
+					alert("教主威武，千秋万载，一统江湖！");
 				}else{
 					alert("呃...呃...");
 				}
@@ -82,7 +82,7 @@ body{
 		
 	}
 	ws.onclose = function(){
-		alert("连接关闭");
+		// alert("连接关闭");
 		Holder.Act = 2; // 关闭
 		ws.send(JSON.stringify(Holder))
 	}

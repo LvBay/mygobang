@@ -2,7 +2,7 @@ package router
 
 import (
 	"fmt"
-	"myweb/controllers"
+	"mygobang/controllers"
 	"net/http"
 	"strings"
 )

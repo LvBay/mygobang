@@ -79,20 +79,20 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// wsList = append(wsList, ws)
 	// defer ws.Close()
-	go roomListener(ws) // 如果不用go关键字怎么实现既可以for循环监听，又能转换IsFirst？
+	go wsListener(ws) // 如果不用go关键字怎么实现既可以for循环监听，又能转换IsFirst？
 	// 下一个进入房间的用户颜色改变
 	IsFirst = TurnBool(IsFirst)
 }
 
-func roomListener(ws *websocket.Conn) {
+func wsListener(ws *websocket.Conn) {
 	for {
-
+		fmt.Println("listen1")
 		_, p, err := ws.ReadMessage()
 		if err != nil {
 
 			return
 		}
-
+		fmt.Println("listen2")
 		// // 解析客户端数据
 		req := &Req{}
 		if err := json.Unmarshal(p, req); err != nil {
@@ -130,8 +130,13 @@ func roomListener(ws *websocket.Conn) {
 			}
 			// 若胜负已分，发给所有人，否则发给除了自己以外的其他人
 			for conn := room.wsList.Front(); conn != nil; conn = conn.Next() {
-				data, _ := json.Marshal(req)
-				conn.Value.(*websocket.Conn).WriteMessage(websocket.TextMessage, data)
+
+				cur := conn.Value.(*websocket.Conn)
+				if req.Over || cur != ws {
+					data, _ := json.Marshal(req)
+					cur.WriteMessage(websocket.TextMessage, data)
+				}
+
 			}
 
 		} else if req.Act == 2 { // 连接断开

@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	_ "myweb/controllers"
-	_ "myweb/router"
+	_ "mygobang/controllers"
+	_ "mygobang/router"
 	"net/http"
 )
 
