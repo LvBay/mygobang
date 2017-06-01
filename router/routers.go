@@ -9,7 +9,6 @@ import (
 
 func init() {
 	http.HandleFunc("/login", controllers.LoginHandler) //设置访问的路由
-	http.HandleFunc("/dogs", controllers.ViewsHandler)  // 瀑布流图片
 	http.HandleFunc("/gobang", controllers.GobangHandler)
 	http.HandleFunc("/gobangws", controllers.WsHandler)
 	CheckStatic(http.DefaultServeMux, "/static/", "./static/")
