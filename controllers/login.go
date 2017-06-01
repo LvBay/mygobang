@@ -1,25 +1,21 @@
 package controllers
 
 import (
-	// "fmt"
-	// "gobang"
-	// "html/template"
+	"html/template"
 	"net/http"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		// fmt.Println("method:", r.Method)
-		// t, _ := template.ParseFiles("views/login.html")
-		// t.Execute(w, nil)
-		w.Write([]byte("123"))
+		t, _ := template.ParseFiles("views/login.html")
+		t.Execute(w, nil)
 	} else if r.Method == "POST" {
-		uid := r.FormValue("uid")
-		passwd := r.FormValue("passwd")
-		if uid == "zyh" && passwd == "ww" {
-			http.Redirect(w, r, "/gabang", 302)
+		roomId := r.FormValue("roomId")
+		if _, exist := rooms[roomId]; exist {
+			w.Write([]byte("房间已创建"))
 		} else {
-			w.Write([]byte("嘿嘿嘿"))
+			rooms[roomId] = &Room{board: &Board{}}
+			http.Redirect(w, r, "/gobang?roomid="+roomId, 302)
 		}
 	}
 }

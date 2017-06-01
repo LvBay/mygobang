@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+
+<style type="text/css">
+body{
+	background-image: url("/static/img/star.jpg");
+}
+#qipan{
+	
+	width:821px;
+	height:716px;
+	padding:20px;
+	background-color:#905a3d;
+	border:6px solid #5f3c23;
+	margin:20px auto;
+	position:relative;
+}
+#qipan>div{
+	width:49px;
+	height:49px;
+	border:1px solid #333;
+	float:left;
+	position:relative;
+}
+#qipan>div span{
+	display:inline-block;
+	width:40px;
+	height:40px;
+	border-radius:100%;
+	position:absolute;
+	/*background-color: white;*/
+}
+</style>
+</head>
+<body onload="createEles()">
+<h1></h1>
+	<div id ="qipan"></div>
+</body>
+
+<script type="text/javascript">
+	var Holder = {
+		Role  : "",
+		Act: 0,
+		Position : "333",
+		Sign:{{.sign}},
+	};
+	// var HOLDER = ""
+	var flag = false;
+	// 全局websocket变量
+	var ws = new WebSocket("ws://localhost:9091/gobangws");
+	ws.onopen = function(){
+		// alert("连接成功");
+		Holder.Act = 0;
+		ws.send(JSON.stringify(Holder))
+	}
+	ws.onmessage = function(data){
+		var ret = JSON.parse(data.data);
+		console.log(data);
+		if (ret.Act == 0){ //登录时返回的信息
+			Holder.Role = ret.Role;
+			if (Holder.Role == "white"){ 
+				flag = true; // 白棋先行
+			}
+			console.log("登录时返回的信息" + ret.Role);
+		}else if (ret.Act == 1){ // 点击后返回的信息
+
+			console.log("点击后返回的信息" + ret);
+			document.getElementById(ret.Position).style.backgroundColor = ret.Role;
+			if (ret.Over==true){
+				if (ret.Role==Holder.Role){
+					alert("教主威武，千秋万载，一统江湖！");
+				}else{
+					alert("呃...呃...");
+				}
+				flag = false;
+			}else{
+				flag = true;
+			}
+		}
+		
+	}
+	ws.onclose = function(){
+		// alert("连接关闭");
+		Holder.Act = 2; // 关闭
+		ws.send(JSON.stringify(Holder))
+	}
+
+
+	function play(ele){
+		// 位置未被填充过，flat==true，颜色不为空
+		if (!ele.style.backgroundColor && flag && Holder.Role){
+			ele.style.backgroundColor = Holder.Role;
+			Holder.Act = 1; // 发送
+			Holder.Position = ele.id;
+
+			ws.send(JSON.stringify(Holder))
+			flag = false;
+			// alert("aaa");
+		}
+	}
+
+</script>
+<script type="text/javascript">
+
+	function createEles(){
+		for(i=0;i<14;i++){
+			for(j=0;j<16;j++){
+				var parentEle = document.getElementById('qipan');
+				var eleDiv = document.createElement("div");
+				var eleSpan = document.createElement("span");
+				eleSpan.style.top = "-20px";
+				eleSpan.style.left = "-20px"; // 左上
+				eleSpan.onclick = function(){play(this)};
+				eleSpan.id= i+"_"+j
+				eleDiv.appendChild(eleSpan);
+
+				if (j==15){// 每一行的最后一列，
+					var eleSpan2 = document.createElement("span");
+					eleSpan2.style.top = "-20px";
+					eleSpan2.style.right = "-20px"; // 右上
+					eleSpan2.onclick = function(){play(this)};
+					eleSpan2.id= i+"_"+(j+1)
+					eleDiv.appendChild(eleSpan2);
+				}
+
+				if (i==13){ // 最后一行
+					var eleSpan2 = document.createElement("span");
+					eleSpan2.style.bottom = "-20px";
+					eleSpan2.style.left = "-20px"; // 左下
+					eleSpan2.onclick = function(){play(this)};
+					eleSpan2.id= (i+1)+"_"+j
+					eleDiv.appendChild(eleSpan2);
+				}
+				if (i==13&&j==15){ //最后一行，最后一列
+					var eleSpan2 = document.createElement("span");
+					eleSpan2.style.bottom = "-20px";
+					eleSpan2.style.right = "-20px"; // 右下
+					eleSpan2.onclick = function(){play(this)};
+					eleSpan2.id= (i+1)+"_"+(j+1)
+					eleDiv.appendChild(eleSpan2);
+				}
+				parentEle.appendChild(eleDiv);
+			}
+		}
+		// connWs(); // websocket
+	}
+</script>
+</html>
